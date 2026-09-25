@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inspecciones Sedes</title>
+    <link rel="shortcut icon" href="logo2.ico" type="image/x-icon">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="./styles/sede.css">
+</head>
+<body>
+    <script src="./js/sede.js" defer></script>
+    <header>
+        <div class="logo-dot">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h1>Inspector Routes</h1>
+        <nav class="header-nav">
+            <a href="inspBlindadoV3.html" class="nav-btn">Rutas</a>
+            <a href="inspSedeV1.html" class="nav-btn active">Sedes</a>
+            <a href="index.html" class="nav-btn">Seguimiento</a>
+        </nav>
+    </header>
+    <main>
+        <!-- Page header -->
+        <div class="page-header">
+            <div>
+                <h2 class="page-title">Nueva Inspección de Sede</h2>
+                <p class="page-sub">Central de Inteligencia y Gestión Integral de Riesgos — Brinks de Colombia</p>
+            </div>
+            <button class="btn-limpiar" onclick="InspeccionesSedes.limpiarFormulario()">↺ Limpiar todo</button>
+        </div>
+
+        <!-- Datos de la sede -->
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-title">Datos de la sede</div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Nombre sede</label>
+                    <input type="text" id="nombreSede" placeholder="Ej: Sucursal Bogotá Norte">
+                </div>
+                <div class="field">
+                    <label>Tipo de inspección</label>
+                    <select id="tipoInspeccion">
+                        <option value="" disabled selected>Seleccione tipo de inspección</option>
+                        <option>Estandar Seg. Electronica</option>
+                        <option>Norma CRS</option>
+                        <option>Retencion CCTV</option>
+                        <option>Riesgo Critico</option>
+                        <option>Seguimiento Visitante</option>
+                        <option>Verifica Alerta</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Abonado</label>
+                    <input type="text" id="abonado" placeholder="Ingrese el abonado">
+                </div>
+                <div class="field">
+                    <label>Dispositivo</label>
+                    <input type="text" id="dispositivo" placeholder="Ingrese el dispositivo">
+                </div>
+            </div>
+            <div class="field-row single" style="margin-top: 4px;">
+                <div class="field">
+                    <label>Observación</label>
+                    <textarea id="observacionSede" placeholder="Ingresa cualquier novedad o comentario relevante..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Selector de estructura de fotos -->
+        <div class="tipo-ruta-wrap estructura-wrap">
+            <span class="tipo-label">Estructura de fotos</span>
+            <div class="tipo-options">
+                <div class="tipo-chip selected" data-value="3fotos" onclick="InspeccionesSedes.seleccionarEstructura(this)">2 arriba + 1 abajo</div>
+                <div class="tipo-chip" data-value="vertical" onclick="InspeccionesSedes.seleccionarEstructura(this)">Fotos verticales</div>
+            </div>
+        </div>
+
+        <!-- Evidencia fotográfica (renderizado dinámico según estructura) -->
+        <div class="card" id="cardFotos" style="margin-bottom: 20px;">
+            <div class="card-title">Evidencia fotográfica</div>
+            <div id="fotosFormContainer" class="fotos-form-grid-3"></div>
+            <button type="button" class="btn-secundario" id="btnAgregarFoto" style="margin-top:14px; display:none;" onclick="InspeccionesSedes.agregarFotoVertical()">
+                + Agregar foto
+            </button>
+        </div>
+
+        <!-- Preview en vivo -->
+        <div class="preview-section">
+            <div class="preview-header">
+                <span class="preview-title">Vista previa en tiempo real</span>
+                <div class="preview-actions">
+                    <button class="btn-copiar" onclick="InspeccionesSedes.copiarPreview()">
+                        <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        Copiar imagen
+                    </button>
+                    <button class="btn-descargar" onclick="InspeccionesSedes.generarReporte()">
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Descargar PNG
+                    </button>
+                </div>
+            </div>
+
+            <div class="preview-wrap" id="previewHtmlSede">
+                <div class="rpt">
+                    <!-- Header -->
+                    <div class="rpt-header">
+                        <div class="rpt-logo">B</div>
+                        <div class="rpt-brand">
+                            <strong>BRINKS DE COLOMBIA</strong>
+                            <span>Central de Inteligencia y Gestión Integral de Riesgos</span>
+                        </div>
+                        <div class="rpt-tipo">
+                            <strong id="pvTipoInspeccion">INSPECCIÓN DE SEDE</strong>
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="rpt-body">
+                        <!-- Columna izquierda -->
+                        <div class="rpt-col">
+                            <!-- Datos sede -->
+                            <div class="rpt-card">
+                                <div class="rpt-card-title">Datos de la sede</div>
+                                <div class="rpt-fields">
+                                    <div class="rpt-field"><label>Nombre sede</label><span id="pvNombreSede">—</span></div>
+									<div class="rpt-field"><label>Abonado</label><span id="pvAbonado">—</span></div>
+                                </div>
+								<!--
+                                <div class="rpt-fields full" style="margin-top:8px">
+                                    <div class="rpt-field"><label>Tipo de inspección</label><span id="pvTipoInsp">—</span></div>
+                                </div>
+								-->
+                                <div class="rpt-fields full" style="margin-top:8px">
+                                    <div class="rpt-field">
+										<label>Dispositivo</label>
+										<div class="containerDispositivo">
+											<span id="pvDispositivo">—</span>
+										</div>
+									</div>
+                                </div>
+                            </div>
+
+                            <!-- Observación -->
+                            <div class="rpt-card">
+                                <div class="rpt-card-title">Observación</div>
+                                <div class="rpt-fields full">
+                                    <div class="rpt-field"><span id="pvObservacionSede" style="font-size:11px;">Sin observaciones.</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna derecha: fotos -->
+                        <div class="rpt-col" id="colFotosPreview">
+                            <div id="pvFotosContainer" class="rpt-fotos-grid-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="rpt-footer">
+                        <span>Brinks de Colombia</span>
+                        <span id="pvGeneradoSede">—</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast"></div>
+</body>
+</html>
