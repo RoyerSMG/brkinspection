@@ -637,7 +637,6 @@ main {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  max-height: 900px;
 }
 
 /* ==========================================================
@@ -729,7 +728,7 @@ main {
 .preview-wrap #observacion { height: auto; }
 
 /* Tarjetas de imagen con altura fija */
-.preview-wrap #colImages .rpt-card { height: 350px; }
+.preview-wrap #colImages .rpt-card { min-height: 350px; }
 
 /* Automativo cuando solo hay 1 imagen */
 .preview-wrap #colImages.single-image .rpt-card {
