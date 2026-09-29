@@ -1,4 +1,4 @@
-import { NAV_LINKS } from "../config/masterData.js";
+import { NAV_LINKS } from "../config/BlindadoData.js";
 
 export function renderHeader(containerId = "app-header") {
   const container = document.getElementById(containerId);

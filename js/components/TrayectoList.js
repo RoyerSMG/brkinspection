@@ -1,4 +1,4 @@
-import { ESTADO_TRAYECTO } from "../config/masterData.js";
+import { ESTADO_TRAYECTO } from "../config/BlindadoData.js";
 import { createCitySelect } from "./CitySelect.js";
 
 /**

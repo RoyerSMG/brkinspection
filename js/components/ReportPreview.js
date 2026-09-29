@@ -4,7 +4,7 @@ import {
   ESTADO_TRAYECTO,
   TIPO_MONEDA_BOR,
   TRIPULACION_LABELS,
-} from "../config/masterData.js";
+} from "../config/BlindadoData.js";
 import { ICONS, withStroke } from "../config/icons.js";
 import { reportHeaderHtml, reportFooterHtml } from "./ReportParts.js";
 import { timestampGenerado } from "../utils/formatters.js";

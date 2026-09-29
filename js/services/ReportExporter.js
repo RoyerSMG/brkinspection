@@ -1,5 +1,5 @@
 import { showToast } from "../components/Toast.js";
-import { TIPO_RUTA_ID } from "../config/masterData.js";
+import { TIPO_RUTA_ID } from "../config/BlindadoData.js";
 import { stampArchivo } from "../utils/formatters.js";
 
 // html2canvas se carga como script global en el HTML

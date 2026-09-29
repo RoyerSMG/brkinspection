@@ -1,4 +1,4 @@
-import { CIUDADES } from "../config/masterData.js";
+import { CIUDADES } from "../config/BlindadoData.js";
 import { fillSelect } from "./Select.js";
 
 const opciones = CIUDADES.map((c) => ({ value: c, label: c }));

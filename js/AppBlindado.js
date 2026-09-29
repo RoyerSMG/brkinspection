@@ -17,7 +17,7 @@ import {
   TIPOS_RUTA,
   TIPO_MONEDA_BOR,
   TRIPULACION_LABELS,
-} from "./config/masterData.js";
+} from "./config/BlindadoData.js";
 
 // id del input en el HTML → clave en el store
 const FIELD_MAP = [

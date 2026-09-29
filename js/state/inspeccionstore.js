@@ -1,4 +1,4 @@
-import { CHECKLIST, ESTADO_DEFAULT_ID, TIPOS_RUTA } from "../config/masterData.js";
+import { CHECKLIST, ESTADO_DEFAULT_ID, TIPOS_RUTA } from "../config/BlindadoData.js";
 
 /** Estado inicial (también se usa para "Limpiar todo") */
 export const createInitialState = () => ({
