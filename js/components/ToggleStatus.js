@@ -1,10 +1,23 @@
-export function createToggleStatus({ id, label, iconSvg, config, onChange }) {
+/**
+ * Toggle con etiqueta de estado (On Line / Off Line, etc.)
+ * Retorna: { element, input, set(bool) }
+ * `set()` cambia el valor SIN disparar onChange (útil para reset).
+ */
+export function createToggleStatus({
+  id,
+  label,
+  iconSvg,
+  iconClass = "",
+  config,
+  checked = false,
+  onChange,
+}) {
   const wrapper = document.createElement("div");
   wrapper.className = "check-item";
 
   wrapper.innerHTML = `
     <div class="check-label">
-      <div class="check-icon">${iconSvg}</div>
+      <div class="check-icon ${iconClass}">${iconSvg}</div>
       ${label}
     </div>
     <div class="toggle-wrap">
@@ -19,12 +32,23 @@ export function createToggleStatus({ id, label, iconSvg, config, onChange }) {
   const input = wrapper.querySelector("input");
   const estadoLabel = wrapper.querySelector(".toggle-estado");
 
-  input.addEventListener("change", () => {
-    const isChecked = input.checked;
+  const pintar = (isChecked) => {
     estadoLabel.innerText = isChecked ? config.on : config.off;
     estadoLabel.className = `toggle-estado ${isChecked ? "on" : "off"}`;
-    if (onChange) onChange(isChecked, isChecked ? config.on : config.off);
+  };
+
+  input.checked = checked;
+  pintar(checked);
+
+  input.addEventListener("change", () => {
+    pintar(input.checked);
+    onChange?.(input.checked, input.checked ? config.on : config.off);
   });
 
-  return { element: wrapper, input };
+  const set = (value) => {
+    input.checked = !!value;
+    pintar(input.checked);
+  };
+
+  return { element: wrapper, input, set };
 }

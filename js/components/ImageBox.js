@@ -1,15 +1,26 @@
+/**
+ * Caja de imagen pegable (Ctrl+V).
+ *
+ * Opciones:
+ *  - initialSrc: imagen con la que arranca (para re-renderizar sin perderla)
+ *  - bare: true → sin wrapper ni label; `element` es directamente el .img-box
+ *
+ * Retorna: { element, limpiar, getSrc }
+ */
 export function createImageBox({
   id,
-  label,
+  label = "",
   placeholderText,
   svgIcon,
+  initialSrc = null,
+  bare = false,
   onChange,
 }) {
   const wrapper = document.createElement("div");
   wrapper.className = "img-box-wrap";
 
   wrapper.innerHTML = `
-    <span class="img-box-label">${label}</span>
+    ${bare ? "" : `<span class="img-box-label">${label}</span>`}
     <div class="img-box" id="${id}" tabindex="0">
       <div class="img-placeholder">
         ${svgIcon}
@@ -23,38 +34,40 @@ export function createImageBox({
   const clearBtn = wrapper.querySelector(".img-clear");
   const placeholder = wrapper.querySelector(".img-placeholder");
 
-  // Evento: enfocar
+  const getSrc = () => box.querySelector("img")?.src ?? null;
+
+  const mostrar = (src) => {
+    box.querySelector("img")?.remove();
+    placeholder.style.display = "none";
+    const img = document.createElement("img");
+    img.src = src;
+    img.style.cssText = "width:100%;height:100%;object-fit:cover;";
+    box.appendChild(img);
+    box.classList.add("has-image");
+  };
+
+  const limpiar = () => {
+    box.querySelector("img")?.remove();
+    box.classList.remove("has-image");
+    placeholder.style.display = "flex";
+    onChange?.(null);
+  };
+
   box.addEventListener("click", () => box.focus());
 
-  // Evento: Pegar imagen
   box.addEventListener("paste", (e) => {
     e.preventDefault();
     const items = Array.from(e.clipboardData?.items || []);
     const imageItem = items.find((item) => item.type.startsWith("image"));
-
     if (!imageItem) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      box.querySelector("img")?.remove();
-      placeholder.style.display = "none";
-
-      const img = document.createElement("img");
-      img.src = event.target.result;
-      img.style.cssText = "width:100%;height:100%;object-fit:cover;";
-      box.appendChild(img);
-
-      if (onChange) onChange(event.target.result);
+      mostrar(event.target.result);
+      onChange?.(event.target.result);
     };
     reader.readAsDataURL(imageItem.getAsFile());
   });
-
-  // Limpiar imagen
-  const limpiar = () => {
-    box.querySelector("img")?.remove();
-    placeholder.style.display = "flex";
-    if (onChange) onChange(null);
-  };
 
   clearBtn.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -65,5 +78,7 @@ export function createImageBox({
     if (e.key === "Delete" || e.key === "Backspace") limpiar();
   });
 
-  return { element: wrapper, limpiar };
+  if (initialSrc) mostrar(initialSrc);
+
+  return { element: bare ? box : wrapper, limpiar, getSrc };
 }

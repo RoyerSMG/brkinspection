@@ -159,6 +159,16 @@
 	font-weight: normal;
 }
 
+footer {
+  padding: 30px;
+
+    p {
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+  }
+}
+
 /* ==========================================================
    4. RESPONSIVE
    ========================================================== */

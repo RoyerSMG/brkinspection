@@ -3,45 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inspecciones</title>
     <link rel="shortcut icon" href="logo2.ico" type="image/x-icon">
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="./js/html2canvas.min.js"></script>
     <link rel="stylesheet" href="./styles/blindado.css">
 </head>
 
 <body>
-    <script src="./js/blindado.js" defer></script>
-    <script type="module" src="./js/app.js"></script>
-
     <div id="app-header"></div>
 
     <main>
-        <!-- Page header -->
         <div class="page-header">
             <div>
                 <h2 class="page-title">Nueva Inspección</h2>
                 <p class="page-sub">Central de Inteligencia y Gestión Integral de Riesgos — Brinks de Colombia</p>
             </div>
-            <button class="btn-limpiar" onclick="Inspecciones.limpiarFormulario()">↺ Limpiar todo</button>
+            <button class="btn-limpiar" id="btnLimpiar" type="button">↺ Limpiar todo</button>
         </div>
 
-        <!-- Tipo de ruta -->
+        <!-- Tipo de ruta (chips generados por TipoRutaChips) -->
         <div class="tipo-ruta-wrap">
             <span class="tipo-label">Tipo de ruta</span>
-            <div class="tipo-options" id="tipoOpciones">
-                <div class="tipo-chip selected" data-value="Interurbana" onclick="Inspecciones.seleccionarTipo(this)">
-                    Interurbana</div>
-                <div class="tipo-chip" data-value="Urbana" onclick="Inspecciones.seleccionarTipo(this)">Urbana</div>
-                <div class="tipo-chip" data-value="Aerea" onclick="Inspecciones.seleccionarTipo(this)">Aerea</div>
-                <div class="tipo-chip" data-value="TAI" onclick="Inspecciones.seleccionarTipo(this)">TAI</div>
-                <div class="tipo-chip" data-value="Punto a punto" onclick="Inspecciones.seleccionarTipo(this)">Punto a
-                    punto</div>
-                <div class="tipo-chip" data-value="Varada" onclick="Inspecciones.seleccionarTipo(this)">Varada</div>
-                <div class="tipo-chip" data-value="Cisterna" onclick="Inspecciones.seleccionarTipo(this)">Cisterna</div>
-                <div class="tipo-chip" data-value="Nocturna" onclick="Inspecciones.seleccionarTipo(this)">Nocturna</div>
-                <div class="tipo-chip" data-value="Moneda BOR" onclick="Inspecciones.seleccionarTipo(this)">Moneda BOR
-                </div>
-            </div>
+            <div class="tipo-options" id="tipoOpciones"></div>
         </div>
 
         <div class="card" style="margin-bottom: 10px;">
@@ -58,20 +42,16 @@
             </div>
         </div>
 
-        <!-- Grid principal -->
         <div class="grid-main">
-            <!-- Card izquierda: datos del vehículo -->
             <div class="card">
                 <div class="card-title">Datos del vehículo</div>
                 <div class="field-row">
                     <div class="field">
                         <label>Placa del vehículo</label>
-                        <input type="text" id="placa" placeholder="Ej: KGA804" maxlength="7"
-                            oninput="this.value=this.value.toUpperCase()">
+                        <input type="text" id="placa" placeholder="Ej: KGA804" maxlength="7">
                     </div>
                     <div class="field">
                         <label>Ciudad Origen</label>
-                        <!-- Se llena dinámicamente desde JS con la lista CIUDADES -->
                         <select id="ciudad"></select>
                     </div>
                 </div>
@@ -90,164 +70,39 @@
                 </div>
             </div>
 
-            <!-- Card derecha: checklist -->
+            <!-- Checklist: lo llena app.js con ToggleStatus + EstadoSelect -->
             <div class="card" id="cardChecklist">
                 <div class="card-title">Control inspeccionado</div>
-                <div class="checklist">
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-gps">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="3" />
-                                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-                                </svg>
-                            </div>
-                            GPS
-                        </div>
-                        <div class="toggle-wrap">
-                            <label class="toggle">
-                                <input type="checkbox" id="chkGps" onchange="Inspecciones.updateToggle(this)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-estado off" id="lblGps">Off Line</span>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-cctv">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M23 7l-7 5 7 5V7z" />
-                                    <rect x="1" y="5" width="15" height="14" rx="2" />
-                                </svg>
-                            </div>
-                            CCTV
-                        </div>
-                        <div class="toggle-wrap">
-                            <label class="toggle">
-                                <input type="checkbox" id="chkCctv" onchange="Inspecciones.updateToggle(this)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-estado off" id="lblCctv">Off Line</span>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-lock">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" />
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                </svg>
-                            </div>
-                            Cerradura
-                        </div>
-                        <div class="toggle-wrap">
-                            <label class="toggle">
-                                <input type="checkbox" id="chkCerradura" onchange="Inspecciones.updateToggle(this)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-estado off" id="lblCerradura">Abierta</span>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-money">
-                                <svg viewBox="0 0 24 24">
-                                    <rect x="2" y="6" width="20" height="12" rx="2" />
-                                    <circle cx="12" cy="12" r="2" />
-                                    <path d="M6 12h.01M18 12h.01" />
-                                </svg>
-                            </div>
-                            Expuestos (valores)
-                        </div>
-                        <div class="toggle-wrap">
-                            <label class="toggle">
-                                <input type="checkbox" id="chkExpuestos" onchange="Inspecciones.updateToggle(this)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-estado off" id="lblExpuestos">Si</span>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-people">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                                </svg>
-                            </div>
-                            Tripulación
-                        </div>
-                        <div class="toggle-wrap">
-                            <label class="toggle">
-                                <input type="checkbox" id="chkTripulacion" onchange="Inspecciones.updateToggle(this)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <span class="toggle-estado off" id="lblTripulacion">Con Novedad</span>
-                        </div>
-                    </div>
-                    <div class="check-item">
-                        <div class="check-label">
-                            <div class="check-icon icon-status">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                    <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="3"
-                                        d="M34.3,39.4c-2.9,2-6.5,3.1-10.3,3.1C13.8,42.5,5.5,34.2,5.5,24c0-4.4,1.6-8.5,4.1-11.7">
-                                    </path>
-                                    <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="3"
-                                        d="M20.1,5.9c1.3-0.3,2.6-0.4,3.9-0.4c10.2,0,18.5,8.3,18.5,18.5c0,2.9-0.7,5.6-1.8,8">
-                                    </path>
-                                    <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="3" points="16.5,24.5 21.5,29.5 31.5,19.5"></polyline>
-                                </svg>
-                            </div>
-                            Estado
-                        </div>
-                        <select id="selEstado">
-                            <option value="1">Cargando</option>
-                            <option value="2" selected>En Ruta</option>
-                            <option value="3">Detenida</option>
-                            <option value="4">Varada</option>
-                            <option value="5">Siniestro</option>
-                            <option value="6">Pernocta</option>
-                            <option value="7">A tiempo</option>
-                            <option value="8">Con retraso</option>
-                            <option value="9">Cancelada</option>
-                            <option value="10">Realizada</option>
-                        </select>
-                    </div>
-                </div>
+                <div class="checklist" id="checklistContainer"></div>
             </div>
-            <div class="card" id="cardTrayecto" style="display:none;">
+
+            <!-- Trayectos (solo Moneda BOR) -->
+            <div class="card" id="cardTrayecto">
                 <div class="card-title">Trayecto</div>
                 <div id="trayectosContainer"></div>
-                <button type="button" class="btn-secundario" onclick="Inspecciones.agregarTrayecto()"
-                    style="margin-top:10px">
+                <button type="button" class="btn-secundario" id="btnAddTrayecto" style="margin-top:10px">
                     + Agregar trayecto
                 </button>
             </div>
         </div>
 
-        <!-- Imágenes -->
         <div class="card">
             <div class="card-title">Evidencia fotográfica</div>
             <div class="imagenes-grid" id="gridEvidencias"></div>
         </div>
 
-        <!-- Preview en vivo -->
         <div class="preview-section">
             <div class="preview-header">
                 <span class="preview-title">Vista previa en tiempo real</span>
                 <div class="preview-actions">
-                    <button class="btn-copiar" onclick="Inspecciones.copiarPreview()">
+                    <button class="btn-copiar" id="btnCopiar" type="button">
                         <svg viewBox="0 0 24 24">
                             <rect x="9" y="9" width="13" height="13" rx="2" />
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </svg>
                         Copiar imagen
                     </button>
-                    <button class="btn-descargar" onclick="Inspecciones.generarReporte()">
+                    <button class="btn-descargar" id="btnDescargar" type="button">
                         <svg viewBox="0 0 24 24">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                             <polyline points="7 10 12 15 17 10" />
@@ -258,173 +113,16 @@
                 </div>
             </div>
 
-            <div class="preview-wrap" id="previewHtml">
-                <div class="rpt">
-                    <!-- Header -->
-                    <div class="rpt-header">
-                        <div class="rpt-logo">B</div>
-                        <div class="rpt-brand">
-                            <strong>BRINKS DE COLOMBIA</strong>
-                            <span>Central de Inteligencia y Gestión Integral de Riesgos</span>
-                        </div>
-                        <div class="rpt-tipo">
-                            <strong id="pvTipoRuta">RUTA INTERURBANA</strong>
-                        </div>
-                    </div>
-
-                    <!-- Body -->
-                    <div class="rpt-body">
-                        <!-- Columna izquierda -->
-                        <div class="rpt-col">
-                            <!-- Datos Tripulación -->
-                            <div class="rpt-card" id="pvCardTripulacion">
-                                <div class="rpt-card-title">Datos de tripulación</div>
-                                <div class="rpt-fields" style="margin-top:8px">
-                                    <div class="rpt-field">
-                                        <label id="pvLblNameJt">Jefe tripulación</label>
-                                        <span id="pvName_jt">—</span>
-                                    </div>
-                                    <div class="rpt-field">
-                                        <label id="pvLblNameConductor">Conductor</label>
-                                        <span id="pvNameConductor">—</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Datos vehículo -->
-                            <div class="rpt-card">
-                                <div class="rpt-card-title">Datos del vehículo</div>
-                                <div class="rpt-fields">
-                                    <div class="rpt-field"><label>Placa</label><span id="pvPlaca">—</span></div>
-                                    <div class="rpt-field"><label>Ciudad Origen</label><span id="pvCiudad">—</span>
-                                    </div>
-                                </div>
-                                <div class="rpt-fields full" style="margin-top:8px">
-                                    <div class="rpt-field"><label>Coordenadas GPS</label><span id="pvCoords">—</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Checklist -->
-                            <div class="rpt-card" id="pvCardChecklist">
-                                <div class="rpt-card-title">Control inspeccionado</div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg viewBox="0 0 24 24" stroke="#a5b4fc">
-                                            <circle cx="12" cy="12" r="3" />
-                                            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-                                        </svg>
-                                        GPS
-                                    </span>
-                                    <span class="rpt-chip" id="pvChkGps">Off Line</span>
-                                </div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg viewBox="0 0 24 24" stroke="#fdba74">
-                                            <path d="M23 7l-7 5 7 5V7z" />
-                                            <rect x="1" y="5" width="15" height="14" rx="2" />
-                                        </svg>
-                                        CCTV
-                                    </span>
-                                    <span class="rpt-chip" id="pvChkCctv">Off Line</span>
-                                </div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg viewBox="0 0 24 24" stroke="#fca5a5">
-                                            <rect x="3" y="11" width="18" height="11" rx="2" />
-                                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                                        </svg>
-                                        Cerradura
-                                    </span>
-                                    <span class="rpt-chip" id="pvChkCerradura">Abierta</span>
-                                </div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg viewBox="0 0 24 24" stroke="#6ee7b7">
-                                            <rect x="2" y="6" width="20" height="12" rx="2" />
-                                            <circle cx="12" cy="12" r="2" />
-                                        </svg>
-                                        Expuestos
-                                    </span>
-                                    <span class="rpt-chip" id="pvChkExpuestos">Si</span>
-                                </div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg viewBox="0 0 24 24" stroke="#c4b5fd">
-                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                            <circle cx="9" cy="7" r="4" />
-                                        </svg>
-                                        Tripulación
-                                    </span>
-                                    <span class="rpt-chip" id="pvChkTripulacion">Con Novedad</span>
-                                </div>
-                                <div class="rpt-check-row">
-                                    <span class="rpt-check-name">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                            <path fill="none" stroke="#000" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="3"
-                                                d="M34.3,39.4c-2.9,2-6.5,3.1-10.3,3.1C13.8,42.5,5.5,34.2,5.5,24c0-4.4,1.6-8.5,4.1-11.7">
-                                            </path>
-                                            <path fill="none" stroke="#000" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="3"
-                                                d="M20.1,5.9c1.3-0.3,2.6-0.4,3.9-0.4c10.2,0,18.5,8.3,18.5,18.5c0,2.9-0.7,5.6-1.8,8">
-                                            </path>
-                                            <polyline fill="none" stroke="#000" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="3"
-                                                points="16.5,24.5 21.5,29.5 31.5,19.5"></polyline>
-                                        </svg>
-                                        Estado
-                                    </span>
-                                    <span class="rpt-chip" id="pvEstado">En Ruta</span>
-                                </div>
-                            </div>
-
-                            <div class="rpt-card" id="pvCardTrayectos" style="display:none">
-                                <div class="rpt-card-title">Trayectos</div>
-                                <div id="pvTrayectos">
-                                    <span class="rpt-img-empty">Sin trayectos</span>
-                                </div>
-                            </div>
-
-                            <!-- Observación (ID ajustado para evitar colisión DOM) -->
-                            <div class="rpt-card" id="pvCardObservacion">
-                                <div class="rpt-card-title">Observación</div>
-                                <div class="rpt-fields full">
-                                    <div class="rpt-field"><span id="pvObservacion" style="font-size:11px;">Sin
-                                            observaciones.</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Columna derecha: imágenes -->
-                        <div class="rpt-col" id="colImages">
-                            <div class="rpt-card">
-                                <div class="rpt-card-title">📍 Foto de ubicación</div>
-                                <div class="rpt-img-box" id="pvImgUbicacion">
-                                    <span class="rpt-img-empty">Sin imagen</span>
-                                </div>
-                            </div>
-
-                            <div class="rpt-card" id="pvCardCctv">
-                                <div class="rpt-card-title" id="pvLblCctvTitle">📷 Captura CCTV</div>
-                                <div class="rpt-img-box" id="pvImgCctv">
-                                    <span class="rpt-img-empty">Sin conexión a video</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="rpt-footer">
-                        <span>Brinks de Colombia</span>
-                        <span id="pvGenerado">—</span>
-                    </div>
-                </div>
-            </div>
+            <!-- ReportPreview inyecta aquí el reporte -->
+            <div class="preview-wrap" id="previewHtml"></div>
         </div>
     </main>
 
     <div class="toast" id="toast"></div>
 
+    <div id="app-footer"></div>
+
+    <script type="module" src="./js/AppBlindado.js"></script>
 </body>
 
 </html>

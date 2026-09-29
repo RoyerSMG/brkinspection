@@ -128,7 +128,7 @@ header h1 {
 main {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 36px 24px 80px;
+  padding: 36px 24px 40px;
 }
 
 /* Cabecera de página */
@@ -878,6 +878,16 @@ main {
 
 .rpt-chip-text {
    font-size: 9px !important;
+}
+
+footer {
+  padding: 30px;
+
+    p {
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+  }
 }
 
 /* ==========================================================

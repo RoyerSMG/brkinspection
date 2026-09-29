@@ -1,20 +1,18 @@
+import { NAV_LINKS } from "../config/masterData.js";
+
 export function renderHeader(containerId = "app-header") {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const currentPath = window.location.pathname.split("/").pop() || "inspeccionesv3.html";
+  const currentPath =
+    window.location.pathname.split("/").pop() || NAV_LINKS[0].href;
 
-  const links = [
-    { label: "Rutas", href: "inspBlindadoV3.html" },
-    { label: "Sedes", href: "inspSedeV1.html" },
-    { label: "Seguimiento", href: "index.html" }
-  ];
-
-  const navHtml = links.map(link => `
+  const navHtml = NAV_LINKS.map(
+    (link) => `
     <a href="${link.href}" class="nav-btn ${currentPath === link.href ? "active" : ""}">
       ${link.label}
-    </a>
-  `).join("");
+    </a>`,
+  ).join("");
 
   container.innerHTML = `
     <header>

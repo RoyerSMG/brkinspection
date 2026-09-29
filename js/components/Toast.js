@@ -1,3 +1,5 @@
+let hideTimer = null;
+
 export function showToast(message, duration = 2000) {
   let toast = document.getElementById("toast");
   if (!toast) {
@@ -10,7 +12,7 @@ export function showToast(message, duration = 2000) {
   toast.innerText = message;
   toast.classList.add("show");
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, duration);
+  // Evita que un toast anterior oculte al nuevo antes de tiempo
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => toast.classList.remove("show"), duration);
 }
