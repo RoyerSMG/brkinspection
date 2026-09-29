@@ -16,4 +16,4 @@ export const createInitialState = () => ({
   imgCctv: null,
 });
 
-export { createStore } from "./createStore.js";
+export { createStore } from "./CreateStore.js";
