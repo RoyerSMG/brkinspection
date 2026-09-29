@@ -1,6 +1,6 @@
-import { reportHeaderHtml, reportFooterHtml } from "./reportParts.js";
+import { reportHeaderHtml, reportFooterHtml } from "./ReportParts.js";
 import { fotosActivas } from "../state/SedeStore.js";
-import { timestampGenerado } from "../utils/formatters.js";
+import { timestampGenerado } from "../utils/Formatters.js";
 
 const template = () => `
   <div class="rpt">

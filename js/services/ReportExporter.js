@@ -1,6 +1,6 @@
 import { showToast } from "../components/Toast.js";
 import { TIPO_RUTA_ID } from "../config/BlindadoData.js";
-import { stampArchivo } from "../utils/formatters.js";
+import { stampArchivo } from "../utils/Formatters.js";
 
 // html2canvas se carga como script global en el HTML
 const capturar = (element, opts = {}) => html2canvas(element, { scale: 2, ...opts });

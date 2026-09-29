@@ -7,7 +7,7 @@ import {
 } from "../config/BlindadoData.js";
 import { ICONS, withStroke } from "../config/icons.js";
 import { reportHeaderHtml, reportFooterHtml } from "./ReportParts.js";
-import { timestampGenerado } from "../utils/formatters.js";
+import { timestampGenerado } from "../utils/Formatters.js";
 
 const chipId = (key) => `pvChk${key.charAt(0).toUpperCase()}${key.slice(1)}`;
 
